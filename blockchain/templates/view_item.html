@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<ul>
+  {% for item in items %}
+    <li>Item ID: {{ item.item_id }}, Item Data: {{ item.item_data }}, Verified: {{ item.verified }}</li>
+  {% empty %}
+    <li>No items available.</li>
+  {% endfor %}
+</ul>
+</body>
+</html>
