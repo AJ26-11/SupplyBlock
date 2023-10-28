@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Success</title>
+</head>
+<body>
+{% if created %}
+  <p>Item {{ item.item_id }} added successfully!</p>
+{% else %}
+  <p>Item {{ item.item_id }} already exists with data: {{ item.item_data }}</p>
+{% endif %}
+</body>
+</html>
