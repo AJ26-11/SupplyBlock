@@ -84,7 +84,15 @@ function packageBatch(
         emit BatchPackaged(batchId, details, packagingDate);
     }
 
-    
+    function shipBatch(string memory batchId, string memory newLocation) public {
+        require(keccak256(bytes(batches[batchId].batchId)) == keccak256(bytes(batchId)), "Batch does not exist");
+        require(!batches[batchId].isShipped, "Batch already shipped");
+
+        batches[batchId].isShipped = true;
+        batches[batchId].currentLocation = newLocation;
+        
+        emit BatchShipped(batchId, newLocation);
+    }
 
 
 """
