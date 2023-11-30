@@ -1,4 +1,9 @@
 from django.shortcuts import render
+from django.shortcuts import render
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from web3 import Web3
 
 # Ethereum setup
@@ -159,5 +164,50 @@ def process_batch(request):
         return render(request, 'success.html', {'tx_hash': tx_hash.hex()})
 
     return render(request, 'process_batch.html')
+
+@login_required
+def package_batch(request):
+    if request.method == 'POST':
+        batch_id = request.POST['batch_id']
+        details = request.POST['details']
+        packaging_date = request.POST['packaging_date']  # Ensure this is in UNIX timestamp format
+
+        tx_hash = send_transaction(contract.functions.packageBatch, batch_id, details, int(packaging_date))
+        return render(request, 'success.html', {'tx_hash': tx_hash.hex()})
+
+    return render(request, 'package_batch.html')
+
+@login_required
+def ship_batch(request):
+    if request.method == 'POST':
+        batch_id = request.POST['batch_id']
+        new_location = request.POST['new_location']
+
+        tx_hash = send_transaction(contract.functions.shipBatch, batch_id, new_location)
+        return render(request, 'success.html', {'tx_hash': tx_hash.hex()})
+
+    return render(request, 'ship_batch.html')
+
+
+
+@login_required
+def deliver_batch(request):
+    if request.method == 'POST':
+        batch_id = request.POST['batch_id']
+        final_location = request.POST['final_location']
+
+        tx_hash = send_transaction(contract.functions.deliverBatch, batch_id, final_location)
+        return render(request, 'success.html', {'tx_hash': tx_hash.hex()})
+
+    return render(request, 'deliver_batch.html')
+
+def view_batch_details(request):
+    if request.method == 'POST':
+        batch_id = request.POST['batch_id']
+
+        batch_details = contract.functions.getBatchDetails(batch_id).call()
+        return render(request, 'batch_details.html', {'batch_details': batch_details})
+
+    return render(request, 'view_batch_details.html')
 
 
