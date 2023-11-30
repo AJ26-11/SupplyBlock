@@ -134,3 +134,30 @@ def view_items(request):
 
     return render(request, 'view_items.html', {'items': items})
 
+
+@login_required
+def add_batch(request):
+    if request.method == 'POST':
+        batch_id = request.POST['batch_id']
+        farm_name = request.POST['farm_name']
+        origin_country = request.POST['origin_country']
+        harvest_date = request.POST['harvest_date']  # Ensure this is in UNIX timestamp format
+
+        tx_hash = send_transaction(contract.functions.addBatch, batch_id, farm_name, origin_country, int(harvest_date))
+        return render(request, 'success.html', {'tx_hash': tx_hash.hex()})
+
+    return render(request, 'add_batch.html')
+
+@login_required
+def process_batch(request):
+    if request.method == 'POST':
+        batch_id = request.POST['batch_id']
+        details = request.POST['details']
+        roasting_date = request.POST['roasting_date']  # Ensure this is in UNIX timestamp format
+
+        tx_hash = send_transaction(contract.functions.processBatch, batch_id, details, int(roasting_date))
+        return render(request, 'success.html', {'tx_hash': tx_hash.hex()})
+
+    return render(request, 'process_batch.html')
+
+
