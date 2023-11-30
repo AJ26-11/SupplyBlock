@@ -6,25 +6,57 @@ web3 = Web3(HTTPProvider("https://sepolia.infura.io/v3/069ed309e7484022918cfca9a
 
 # Compile the smart contract source code
 contract_source_code = """
+
 pragma solidity ^0.8.0;
 
-contract SupplyChain {
-    struct Item {
-        string itemData;
-        bool verified;
+contract CoffeeBeanSupplyChain {
+    struct CoffeeBeanBatch {
+        string batchId;
+        string farmName;
+        string originCountry;
+        uint256 harvestDate;
+        string processingDetails;
+        uint256 roastingDate;
+        string packagingDetails;
+        uint256 packagingDate;
+        bool isShipped;
+        bool isDelivered;
+        string currentLocation;
     }
 
-    mapping(string => Item) public items;
+    mapping(string => CoffeeBeanBatch) public batches;
 
-    function addItem(string memory itemId, string memory itemData) public {
-        require(!items[itemId].verified, "Item already verified");
-        items[itemId] = Item(itemData, false);
+    event BatchAdded(string batchId);
+    event BatchProcessed(string batchId, string processingDetails, uint256 roastingDate);
+    event BatchPackaged(string batchId, string packagingDetails, uint256 packagingDate);
+    event BatchShipped(string batchId, string newLocation);
+    event BatchDelivered(string batchId, string finalLocation);
+
+    function addBatch(
+        string memory batchId, 
+        string memory farmName, 
+        string memory originCountry, 
+        uint256 harvestDate
+    ) public {
+        require(bytes(batches[batchId].batchId).length == 0, "Batch already exists");
+        
+        batches[batchId] = CoffeeBeanBatch({
+            batchId: batchId,
+            farmName: farmName,
+            originCountry: originCountry,
+            harvestDate: harvestDate,
+            processingDetails: "",
+            roastingDate: 0,
+            packagingDetails: "",
+            packagingDate: 0,
+            isShipped: false,
+            isDelivered: false,
+            currentLocation: farmName
+        });
+
+        emit BatchAdded(batchId);
     }
 
-    function verifyItem(string memory itemId, string memory itemData) public view returns (bool) {
-        return keccak256(abi.encodePacked(items[itemId].itemData)) == keccak256(abi.encodePacked(itemData));
-    }
-}
 """
 
 compiled_sol = compile_source(contract_source_code)
