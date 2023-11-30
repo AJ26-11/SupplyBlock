@@ -57,6 +57,21 @@ contract CoffeeBeanSupplyChain {
         emit BatchAdded(batchId);
     }
 
+    
+    function processBatch(
+        string memory batchId, 
+        string memory details, 
+        uint256 roastingDate
+    ) public {
+        require(keccak256(bytes(batches[batchId].batchId)) == keccak256(bytes(batchId)), "Batch does not exist");
+        
+        batches[batchId].processingDetails = details;
+        batches[batchId].roastingDate = roastingDate;
+        
+        emit BatchProcessed(batchId, details, roastingDate);
+    }
+
+
 """
 
 compiled_sol = compile_source(contract_source_code)
@@ -89,6 +104,7 @@ tx_hash = web3.eth.send_raw_transaction(signed_transaction.rawTransaction)
 tx_receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
 contract_address = tx_receipt['contractAddress']
 print(f"Contract deployed at address: {contract_address}")
+
 
 
 
