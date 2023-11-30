@@ -71,6 +71,21 @@ contract CoffeeBeanSupplyChain {
         emit BatchProcessed(batchId, details, roastingDate);
     }
 
+function packageBatch(
+        string memory batchId, 
+        string memory details, 
+        uint256 packagingDate
+    ) public {
+        require(keccak256(bytes(batches[batchId].batchId)) == keccak256(bytes(batchId)), "Batch does not exist");
+        
+        batches[batchId].packagingDetails = details;
+        batches[batchId].packagingDate = packagingDate;
+        
+        emit BatchPackaged(batchId, details, packagingDate);
+    }
+
+    
+
 
 """
 
