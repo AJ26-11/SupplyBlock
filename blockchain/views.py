@@ -188,3 +188,26 @@ def ship_batch(request):
 
     return render(request, 'ship_batch.html')
 
+
+
+@login_required
+def deliver_batch(request):
+    if request.method == 'POST':
+        batch_id = request.POST['batch_id']
+        final_location = request.POST['final_location']
+
+        tx_hash = send_transaction(contract.functions.deliverBatch, batch_id, final_location)
+        return render(request, 'success.html', {'tx_hash': tx_hash.hex()})
+
+    return render(request, 'deliver_batch.html')
+
+def view_batch_details(request):
+    if request.method == 'POST':
+        batch_id = request.POST['batch_id']
+
+        batch_details = contract.functions.getBatchDetails(batch_id).call()
+        return render(request, 'batch_details.html', {'batch_details': batch_details})
+
+    return render(request, 'view_batch_details.html')
+
+
