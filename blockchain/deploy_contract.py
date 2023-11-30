@@ -94,6 +94,25 @@ function packageBatch(
         emit BatchShipped(batchId, newLocation);
     }
 
+    function deliverBatch(string memory batchId, string memory finalLocation) public {
+        require(keccak256(bytes(batches[batchId].batchId)) == keccak256(bytes(batchId)), "Batch does not exist");
+        require(batches[batchId].isShipped, "Batch not yet shipped");
+        require(!batches[batchId].isDelivered, "Batch already delivered");
+
+        batches[batchId].isDelivered = true;
+        batches[batchId].currentLocation = finalLocation;
+        
+        emit BatchDelivered(batchId, finalLocation);
+    }
+
+    function getBatchDetails(string memory batchId) public view returns (CoffeeBeanBatch memory) {
+        require(keccak256(bytes(batches[batchId].batchId)) == keccak256(bytes(batchId)), "Batch does not exist");
+        return batches[batchId];
+    }
+}
+
+
+
 
 """
 
