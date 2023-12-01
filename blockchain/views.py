@@ -16,13 +16,12 @@ contract_address = '0x2B6648D0a6503FA07c86f06d8c2c4d38f46F8d3d'
 contract_address_bytes = web3.to_checksum_address(contract_address)
 
 # Replace 'YOUR_CONTRACT_ABI' with the ABI (Application Binary Interface) of your smart contract
-contract_abi = 
-[
+contract_abi = [
     {
-        "anonymous": false,
+        "anonymous": False,
         "inputs": [
             {
-                "indexed": false,
+                "indexed": False,
                 "internalType": "string",
                 "name": "batchId",
                 "type": "string"
@@ -32,10 +31,10 @@ contract_abi =
         "type": "event"
     },
     {
-        "anonymous": false,
+        "anonymous": False,
         "inputs": [
             {
-                "indexed": false,
+                "indexed": False,
                 "internalType": "string",
                 "name": "batchId",
                 "type": "string"
