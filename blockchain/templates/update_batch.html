@@ -1,43 +1,84 @@
+
 {% extends 'base.html' %}
 
 {% block title %}Update Batch{% endblock %}
 
 {% block content %}
-    <h2>Update Batch</h2>
-    <form method="post" class="mt-3">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="batchId">Batch ID</label>
-            <input type="text" class="form-control" id="batchId" name="batch_id" required>
-        </div>
-        <div class="form-group">
-            <label for="processingDetails">Processing Details</label>
-            <textarea class="form-control" id="processingDetails" name="processing_details"></textarea>
-        </div>
-        <div class="form-group">
-            <label for="roastingDate">Roasting Date</label>
-            <input type="date" class="form-control" id="roastingDate" name="roasting_date">
-        </div>
-        <div class="form-group">
-            <label for="packagingDetails">Packaging Details</label>
-            <textarea class="form-control" id="packagingDetails" name="packaging_details"></textarea>
-        </div>
-        <div class="form-group">
-            <label for="packagingDate">Packaging Date</label>
-            <input type="date" class="form-control" id="packagingDate" name="packaging_date">
-        </div>
-        <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" id="isShipped" name="is_shipped">
-            <label class="form-check-label" for="isShipped">Is Shipped?</label>
-        </div>
-        <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" id="isDelivered" name="is_delivered">
-            <label class="form-check-label" for="isDelivered">Is Delivered?</label>
-        </div>
-        <div class="form-group">
-            <label for="currentLocation">Current Location</label>
-            <input type="text" class="form-control" id="currentLocation" name="current_location">
-        </div>
-        <button type="submit" class="btn btn-primary">Update Batch</button>
-    </form>
-{% endblock %}
+<section class="section">
+    <div class="container">
+        <h1 class="title">Update Batch</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="field">
+                <label class="label" for="batchId">Batch ID</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input" type="text" id="batchId" name="batch_id" placeholder="Enter Batch ID" required>
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-barcode"></i>
+                    </span>
+                </div>
+                <div class="level">
+                    <div class="level-left">
+                        <button class="button is-info mt-3" type="button" id="fetchDataBtn">Fetch Data</button>
+                    </div>
+                    <div class="level-right">
+                        <span id="fetchResult" class="mt-3 pl-4 has-text-weight-bold is-size-4"></span>
+                    </div>
+                </div>
+                <p class="help is-danger" id="batchError" style="display: none;"></p>
+            </div>
+
+            <div class="field">
+                <label class="label" for="processingDetails">Processing Details</label>
+                <div class="control">
+                    <textarea class="textarea" id="processingDetails" name="processing_details"></textarea>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label" for="roastingDate">Roasting Date</label>
+                <div class="control">
+                    <input class="input" type="date" id="roastingDate" name="roasting_date">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label" for="packagingDetails">Packaging Details</label>
+                <div class="control">
+                    <textarea class="textarea" id="packagingDetails" name="packaging_details"></textarea>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label" for="packagingDate">Packaging Date</label>
+                <div class="control">
+                    <input class="input" type="date" id="packagingDate" name="packaging_date">
+                </div>
+            </div>
+
+            <div class="field">
+                <input type="checkbox" class="checkbox" id="isShipped" name="is_shipped">
+                <label class="checkbox" for="isShipped">Is Shipped?</label>
+            </div>
+
+            <div class="field">
+                <input type="checkbox" class="checkbox" id="isDelivered" name="is_delivered">
+                <label class="checkbox" for="isDelivered">Is Delivered?</label>
+            </div>
+
+            <div class="field">
+                <label class="label" for="currentLocation">Current Location</label>
+                <div class="control">
+                    <input class="input" type="text" id="currentLocation" name="current_location">
+                </div>
+            </div>
+
+            <div class="control">
+                <button type="submit" class="button is-primary">Update Batch</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+
+{% endblock %}
