@@ -64,4 +64,4 @@ class UserLoginViewTests(TestCase):
             'username': 'wronguser',
             'password': 'wrongpassword'
         })
-        self.assertNotEqual(response.status_code, 302)
+        self.assertNotEqual(response.status_code,302)
