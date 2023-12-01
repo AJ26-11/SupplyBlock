@@ -1,67 +1,52 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from .models import CoffeeBeanBatch
-from django.contrib.auth.models import User
+from .models import Batch
+from unittest.mock import patch
 
-class CoffeeBeanBatchModelTests(TestCase):
+class MockTransactionHash:
+    def hex(self):
+        return '0x123'
 
-    def setUp(self):
-        CoffeeBeanBatch.objects.create(
-            batch_id="batch123",
-            farm_name="Test Farm",
-            origin_country="Testland",
-            harvest_date="2021-01-01",
-            # ... other fields ...
-        )
-
-    def test_batch_creation(self):
-        batch = CoffeeBeanBatch.objects.get(batch_id="batch123")
-        self.assertEqual(batch.farm_name, "Test Farm")
-
-    def test_batch_failure(self):
-        # This test is supposed to fail for demonstration
-        batch = CoffeeBeanBatch.objects.get(batch_id="batch123")
-        self.assertEqual(batch.farm_name, "Nonexistent Farm")
-
-class UserRegistrationViewTests(TestCase):
+class TestViews(TestCase):
 
     def setUp(self):
         self.client = Client()
+        self.add_batch_url = reverse('add_batch')
+        self.view_batch_url = reverse('view_batch')
+        self.update_batch_url = reverse('update_batch')
+        self.check_batch_id_url = reverse('check_batch_id')
+        self.fetch_batch_data_url = reverse('fetch_batch_data')
 
-    def test_registration_view(self):
-        response = self.client.get(reverse('register'))
+        self.batch_data = {
+            'batch_id': 'Batch001',
+            'farm_name': 'Test Farm',
+            'origin_country': 'Testland',
+            'harvest_date': '2023-01-01',
+            'processing_details': '',
+            'roasting_date': '',
+            'packaging_details': '',
+            'packaging_date': '',
+            'is_shipped': False,
+            'is_delivered': False,
+            'current_location': 'Test Location'
+        }
+
+        self.add_batch_data = {
+            'batch_id': 'Batch001',
+            'farm_name': 'Test Farm',
+            'origin_country': 'Testland',
+            'harvest_date': '2023-01-01'
+        }
+
+    @patch('blockchain.views.send_transaction')
+    def test_add_batch_POST_new_batch(self, mock_send_transaction):
+        mock_send_transaction.return_value = MockTransactionHash()
+        response = self.client.post(self.add_batch_url, self.batch_data)
         self.assertEqual(response.status_code, 200)
+        self.assertIn('0x123', response.content.decode())
 
-    def test_successful_registration(self):
-        response = self.client.post(reverse('register'), data={
-            'username': 'testuser',
-            'email': 'test@test.com',
-            'password1': 'testpassword123',
-            'password2': 'testpassword123'
-        })
-        self.assertEqual(response.status_code, 302)  # Redirect status
-        self.assertEqual(User.objects.count(), 1)
-
-class UserLoginViewTests(TestCase):
-
-    def setUp(self):
-        self.client = Client()
-        self.user = User.objects.create_user(username='testuser', password='testpassword123')
-
-    def test_login_view(self):
-        response = self.client.get(reverse('login'))
+    def test_add_batch_POST_existing_batch(self):
+        Batch.objects.create(batch_id=self.batch_data['batch_id'])
+        response = self.client.post(self.add_batch_url, self.batch_data)
         self.assertEqual(response.status_code, 200)
-
-    def test_successful_login(self):
-        response = self.client.post(reverse('login'), data={
-            'username': 'testuser',
-            'password': 'testpassword123'
-        })
-        self.assertEqual(response.status_code, 302)  # Redirect status
-
-    def test_failed_login(self):
-        response = self.client.post(reverse('login'), data={
-            'username': 'wronguser',
-            'password': 'wrongpassword'
-        })
-        self.assertNotEqual(response.status_code,302)
+        self.assertIn('Not available', response.content.decode())
