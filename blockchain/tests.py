@@ -50,3 +50,27 @@ class TestViews(TestCase):
         response = self.client.post(self.add_batch_url, self.batch_data)
         self.assertEqual(response.status_code, 200)
         self.assertIn('Not available', response.content.decode())
+
+    @patch('blockchain.views.contract.functions.getBatchDetails')
+    def test_view_batch_POST_valid_batch(self, mock_get_batch_details):
+        mock_get_batch_details.return_value.call.return_value = (self.batch_data, True)
+        Batch.objects.create(batch_id=self.batch_data['batch_id'])
+        response = self.client.post(self.view_batch_url, {'batch_id': self.batch_data['batch_id']})
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_batch_POST_invalid_batch(self):
+        response = self.client.post(self.view_batch_url, {'batch_id': 'InvalidBatchID'})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('BatchID does not exist', response.content.decode())
+
+    @patch('blockchain.views.send_transaction')
+    def test_update_batch_POST(self, mock_send_transaction):
+        # Use MockTransactionHash as the return value for the mocked function
+        mock_send_transaction.return_value = MockTransactionHash()
+        Batch.objects.create(batch_id=self.batch_data['batch_id'])
+
+        updated_data = {**self.batch_data, 'new_processing_details': 'Updated Processing'}
+        response = self.client.post(self.update_batch_url, updated_data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('0x123', response.content.decode())
