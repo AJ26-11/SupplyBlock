@@ -14,3 +14,11 @@ class CoffeeBeanBatchModelTests(TestCase):
             # ... other fields ...
         )
 
+    def test_batch_creation(self):
+        batch = CoffeeBeanBatch.objects.get(batch_id="batch123")
+        self.assertEqual(batch.farm_name, "Test Farm")
+
+    def test_batch_failure(self):
+        # This test is supposed to fail for demonstration
+        batch = CoffeeBeanBatch.objects.get(batch_id="batch123")
+        self.assertEqual(batch.farm_name, "Nonexistent Farm")
