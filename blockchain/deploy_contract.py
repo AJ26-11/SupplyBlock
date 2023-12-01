@@ -7,6 +7,7 @@ web3 = Web3(HTTPProvider("https://sepolia.infura.io/v3/069ed309e7484022918cfca9a
 # Compile the smart contract source code
 contract_source_code = """
 
+
 pragma solidity ^0.8.0;
 
 contract CoffeeBeanSupplyChain {
@@ -27,15 +28,12 @@ contract CoffeeBeanSupplyChain {
     mapping(string => CoffeeBeanBatch) public batches;
 
     event BatchAdded(string batchId);
-    event BatchProcessed(string batchId, string processingDetails, uint256 roastingDate);
-    event BatchPackaged(string batchId, string packagingDetails, uint256 packagingDate);
-    event BatchShipped(string batchId, string newLocation);
-    event BatchDelivered(string batchId, string finalLocation);
+    event BatchUpdated(string batchId);
 
     function addBatch(
-        string memory batchId, 
-        string memory farmName, 
-        string memory originCountry, 
+        string memory batchId,
+        string memory farmName,
+        string memory originCountry,
         uint256 harvestDate
     ) public {
         require(bytes(batches[batchId].batchId).length == 0, "Batch already exists");
@@ -56,62 +54,6 @@ contract CoffeeBeanSupplyChain {
 
         emit BatchAdded(batchId);
     }
-
-    
-    function processBatch(
-        string memory batchId, 
-        string memory details, 
-        uint256 roastingDate
-    ) public {
-        require(keccak256(bytes(batches[batchId].batchId)) == keccak256(bytes(batchId)), "Batch does not exist");
-        
-        batches[batchId].processingDetails = details;
-        batches[batchId].roastingDate = roastingDate;
-        
-        emit BatchProcessed(batchId, details, roastingDate);
-    }
-
-function packageBatch(
-        string memory batchId, 
-        string memory details, 
-        uint256 packagingDate
-    ) public {
-        require(keccak256(bytes(batches[batchId].batchId)) == keccak256(bytes(batchId)), "Batch does not exist");
-        
-        batches[batchId].packagingDetails = details;
-        batches[batchId].packagingDate = packagingDate;
-        
-        emit BatchPackaged(batchId, details, packagingDate);
-    }
-
-    function shipBatch(string memory batchId, string memory newLocation) public {
-        require(keccak256(bytes(batches[batchId].batchId)) == keccak256(bytes(batchId)), "Batch does not exist");
-        require(!batches[batchId].isShipped, "Batch already shipped");
-
-        batches[batchId].isShipped = true;
-        batches[batchId].currentLocation = newLocation;
-        
-        emit BatchShipped(batchId, newLocation);
-    }
-
-    function deliverBatch(string memory batchId, string memory finalLocation) public {
-        require(keccak256(bytes(batches[batchId].batchId)) == keccak256(bytes(batchId)), "Batch does not exist");
-        require(batches[batchId].isShipped, "Batch not yet shipped");
-        require(!batches[batchId].isDelivered, "Batch already delivered");
-
-        batches[batchId].isDelivered = true;
-        batches[batchId].currentLocation = finalLocation;
-        
-        emit BatchDelivered(batchId, finalLocation);
-    }
-
-    function getBatchDetails(string memory batchId) public view returns (CoffeeBeanBatch memory) {
-        require(keccak256(bytes(batches[batchId].batchId)) == keccak256(bytes(batchId)), "Batch does not exist");
-        return batches[batchId];
-    }
-}
-
-
 
 
 """
