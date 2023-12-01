@@ -16,12 +16,13 @@ contract_address = '0x2B6648D0a6503FA07c86f06d8c2c4d38f46F8d3d'
 contract_address_bytes = web3.to_checksum_address(contract_address)
 
 # Replace 'YOUR_CONTRACT_ABI' with the ABI (Application Binary Interface) of your smart contract
-contract_abi = [
+contract_abi = 
+[
     {
-        "anonymous": False,
+        "anonymous": false,
         "inputs": [
             {
-                "indexed": False,
+                "indexed": false,
                 "internalType": "string",
                 "name": "batchId",
                 "type": "string"
@@ -31,91 +32,16 @@ contract_abi = [
         "type": "event"
     },
     {
-        "anonymous": False,
+        "anonymous": false,
         "inputs": [
             {
-                "indexed": False,
+                "indexed": false,
                 "internalType": "string",
                 "name": "batchId",
                 "type": "string"
-            },
-            {
-                "indexed": False,
-                "internalType": "string",
-                "name": "finalLocation",
-                "type": "string"
             }
         ],
-        "name": "BatchDelivered",
-        "type": "event"
-    },
-    {
-        "anonymous": False,
-        "inputs": [
-            {
-                "indexed": False,
-                "internalType": "string",
-                "name": "batchId",
-                "type": "string"
-            },
-            {
-                "indexed": False,
-                "internalType": "string",
-                "name": "packagingDetails",
-                "type": "string"
-            },
-            {
-                "indexed": False,
-                "internalType": "uint256",
-                "name": "packagingDate",
-                "type": "uint256"
-            }
-        ],
-        "name": "BatchPackaged",
-        "type": "event"
-    },
-    {
-        "anonymous": False,
-        "inputs": [
-            {
-                "indexed": False,
-                "internalType": "string",
-                "name": "batchId",
-                "type": "string"
-            },
-            {
-                "indexed": False,
-                "internalType": "string",
-                "name": "processingDetails",
-                "type": "string"
-            },
-            {
-                "indexed": False,
-                "internalType": "uint256",
-                "name": "roastingDate",
-                "type": "uint256"
-            }
-        ],
-        "name": "BatchProcessed",
-        "type": "event"
-    },
-    {
-        "anonymous": False,
-        "inputs": [
-            {
-                "indexed": False,
-                "internalType": "string",
-                "name": "batchId",
-                "type": "string"
-            },
-            {
-                "indexed": False,
-                "internalType": "string",
-                "name": "newLocation",
-                "type": "string"
-            }
-        ],
-        "name": "BatchShipped",
+        "name": "BatchUpdated",
         "type": "event"
     },
     {
@@ -221,24 +147,6 @@ contract_abi = [
                 "internalType": "string",
                 "name": "batchId",
                 "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "finalLocation",
-                "type": "string"
-            }
-        ],
-        "name": "deliverBatch",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "batchId",
-                "type": "string"
             }
         ],
         "name": "getBatchDetails",
@@ -318,62 +226,47 @@ contract_abi = [
             },
             {
                 "internalType": "string",
-                "name": "details",
+                "name": "newProcessingDetails",
                 "type": "string"
             },
             {
                 "internalType": "uint256",
-                "name": "packagingDate",
+                "name": "newRoastingDate",
                 "type": "uint256"
-            }
-        ],
-        "name": "packageBatch",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "batchId",
-                "type": "string"
             },
             {
                 "internalType": "string",
-                "name": "details",
+                "name": "newPackagingDetails",
                 "type": "string"
             },
             {
                 "internalType": "uint256",
-                "name": "roastingDate",
+                "name": "newPackagingDate",
                 "type": "uint256"
-            }
-        ],
-        "name": "processBatch",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
+            },
             {
-                "internalType": "string",
-                "name": "batchId",
-                "type": "string"
+                "internalType": "bool",
+                "name": "newIsShipped",
+                "type": "bool"
+            },
+            {
+                "internalType": "bool",
+                "name": "newIsDelivered",
+                "type": "bool"
             },
             {
                 "internalType": "string",
-                "name": "newLocation",
+                "name": "newCurrentLocation",
                 "type": "string"
             }
         ],
-        "name": "shipBatch",
+        "name": "updateBatch",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     }
 ]
+
 
 account = "0xa7255745188F75a23b6e241c69D360AE606B2da2"
 private_key = "6214ca32dbc6e81217d6bcdd1f75c618691bc7e7943637d6202b182fed5e2d9d"
