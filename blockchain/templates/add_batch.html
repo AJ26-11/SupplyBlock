@@ -14,4 +14,40 @@
     </div>
     <div class="mb-3">
         <label for="originCountry" class="form-label">Origin Country</label>
-        <input type="text" class="form-control" id="originCountry" 
+        <input type="text" class="form-control" id="originCountry" name="origin_country" required>
+    </div>
+    <div class="mb-3">
+        <label for="harvestDate" class="form-label">Harvest Date</label>
+        <input type="date" class="form-control" id="harvestDate" name="harvest_date" required>
+    </div>
+    <div class="mb-3">
+        <label for="processingDetails" class="form-label">Processing Details</label>
+        <textarea class="form-control" id="processingDetails" name="processing_details"></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="roastingDate" class="form-label">Roasting Date</label>
+        <input type="date" class="form-control" id="roastingDate" name="roasting_date">
+    </div>
+    <div class="mb-3">
+        <label for="packagingDetails" class="form-label">Packaging Details</label>
+        <textarea class="form-control" id="packagingDetails" name="packaging_details"></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="packagingDate" class="form-label">Packaging Date</label>
+        <input type="date" class="form-control" id="packagingDate" name="packaging_date">
+    </div>
+    <div class="mb-3">
+        <label for="currentLocation" class="form-label">Current Location</label>
+        <input type="text" class="form-control" id="currentLocation" name="current_location">
+    </div>
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="isShipped" name="is_shipped">
+        <label class="form-check-label" for="isShipped">Is Shipped?</label>
+    </div>
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="isDelivered" name="is_delivered">
+        <label class="form-check-label" for="isDelivered">Is Delivered?</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Batch</button>
+</form>
+{% endblock %}
