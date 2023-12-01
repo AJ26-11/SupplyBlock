@@ -18,53 +18,27 @@ contract_address_bytes = web3.to_checksum_address(contract_address)
 # Replace 'YOUR_CONTRACT_ABI' with the ABI (Application Binary Interface) of your smart contract
 contract_abi = [
     {
-        "anonymous": False,
+        "anonymous": false,
         "inputs": [
-            {
-                "indexed": False,
-                "internalType": "string",
-                "name": "batchId",
-                "type": "string"
-            }
+            {"indexed": false, "internalType": "string", "name": "batchId", "type": "string"}
         ],
         "name": "BatchAdded",
         "type": "event"
     },
     {
-        "anonymous": False,
+        "anonymous": false,
         "inputs": [
-            {
-                "indexed": False,
-                "internalType": "string",
-                "name": "batchId",
-                "type": "string"
-            }
+            {"indexed": false, "internalType": "string", "name": "batchId", "type": "string"}
         ],
         "name": "BatchUpdated",
         "type": "event"
     },
     {
         "inputs": [
-            {
-                "internalType": "string",
-                "name": "batchId",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "farmName",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "originCountry",
-                "type": "string"
-            },
-            {
-                "internalType": "uint256",
-                "name": "harvestDate",
-                "type": "uint256"
-            }
+            {"internalType": "string", "name": "batchId", "type": "string"},
+            {"internalType": "string", "name": "farmName", "type": "string"},
+            {"internalType": "string", "name": "originCountry", "type": "string"},
+            {"internalType": "uint256", "name": "harvestDate", "type": "uint256"}
         ],
         "name": "addBatch",
         "outputs": [],
@@ -73,191 +47,64 @@ contract_abi = [
     },
     {
         "inputs": [
-            {
-                "internalType": "string",
-                "name": "",
-                "type": "string"
-            }
+            {"internalType": "string", "name": "", "type": "string"}
         ],
         "name": "batches",
         "outputs": [
-            {
-                "internalType": "string",
-                "name": "batchId",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "farmName",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "originCountry",
-                "type": "string"
-            },
-            {
-                "internalType": "uint256",
-                "name": "harvestDate",
-                "type": "uint256"
-            },
-            {
-                "internalType": "string",
-                "name": "processingDetails",
-                "type": "string"
-            },
-            {
-                "internalType": "uint256",
-                "name": "roastingDate",
-                "type": "uint256"
-            },
-            {
-                "internalType": "string",
-                "name": "packagingDetails",
-                "type": "string"
-            },
-            {
-                "internalType": "uint256",
-                "name": "packagingDate",
-                "type": "uint256"
-            },
-            {
-                "internalType": "bool",
-                "name": "isShipped",
-                "type": "bool"
-            },
-            {
-                "internalType": "bool",
-                "name": "isDelivered",
-                "type": "bool"
-            },
-            {
-                "internalType": "string",
-                "name": "currentLocation",
-                "type": "string"
-            }
+            {"internalType": "string", "name": "batchId", "type": "string"},
+            {"internalType": "string", "name": "farmName", "type": "string"},
+            {"internalType": "string", "name": "originCountry", "type": "string"},
+            {"internalType": "uint256", "name": "harvestDate", "type": "uint256"},
+            {"internalType": "string", "name": "processingDetails", "type": "string"},
+            {"internalType": "uint256", "name": "roastingDate", "type": "uint256"},
+            {"internalType": "string", "name": "packagingDetails", "type": "string"},
+            {"internalType": "uint256", "name": "packagingDate", "type": "uint256"},
+            {"internalType": "bool", "name": "isShipped", "type": "bool"},
+            {"internalType": "bool", "name": "isDelivered", "type": "bool"},
+            {"internalType": "string", "name": "currentLocation", "type": "string"}
         ],
         "stateMutability": "view",
         "type": "function"
     },
     {
         "inputs": [
-            {
-                "internalType": "string",
-                "name": "batchId",
-                "type": "string"
-            }
+            {"internalType": "string", "name": "batchId", "type": "string"}
         ],
         "name": "getBatchDetails",
         "outputs": [
             {
                 "components": [
-                    {
-                        "internalType": "string",
-                        "name": "batchId",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "farmName",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "originCountry",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "harvestDate",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "processingDetails",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "roastingDate",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "packagingDetails",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "packagingDate",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "bool",
-                        "name": "isShipped",
-                        "type": "bool"
-                    },
-                    {
-                        "internalType": "bool",
-                        "name": "isDelivered",
-                        "type": "bool"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "currentLocation",
-                        "type": "string"
-                    }
+                    {"internalType": "string", "name": "batchId", "type": "string"},
+                    {"internalType": "string", "name": "farmName", "type": "string"},
+                    {"internalType": "string", "name": "originCountry", "type": "string"},
+                    {"internalType": "uint256", "name": "harvestDate", "type": "uint256"},
+                    {"internalType": "string", "name": "processingDetails", "type": "string"},
+                    {"internalType": "uint256", "name": "roastingDate", "type": "uint256"},
+                    {"internalType": "string", "name": "packagingDetails", "type": "string"},
+                    {"internalType": "uint256", "name": "packagingDate", "type": "uint256"},
+                    {"internalType": "bool", "name": "isShipped", "type": "bool"},
+                    {"internalType": "bool", "name": "isDelivered", "type": "bool"},
+                    {"internalType": "string", "name": "currentLocation", "type": "string"}
                 ],
                 "internalType": "struct CoffeeBeanSupplyChain.CoffeeBeanBatch",
                 "name": "",
                 "type": "tuple"
-            }
+            },
+            {"internalType": "bool", "name": "", "type": "bool"}
         ],
         "stateMutability": "view",
         "type": "function"
     },
     {
         "inputs": [
-            {
-                "internalType": "string",
-                "name": "batchId",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "newProcessingDetails",
-                "type": "string"
-            },
-            {
-                "internalType": "uint256",
-                "name": "newRoastingDate",
-                "type": "uint256"
-            },
-            {
-                "internalType": "string",
-                "name": "newPackagingDetails",
-                "type": "string"
-            },
-            {
-                "internalType": "uint256",
-                "name": "newPackagingDate",
-                "type": "uint256"
-            },
-            {
-                "internalType": "bool",
-                "name": "newIsShipped",
-                "type": "bool"
-            },
-            {
-                "internalType": "bool",
-                "name": "newIsDelivered",
-                "type": "bool"
-            },
-            {
-                "internalType": "string",
-                "name": "newCurrentLocation",
-                "type": "string"
-            }
+            {"internalType": "string", "name": "batchId", "type": "string"},
+            {"internalType": "string", "name": "newProcessingDetails", "type": "string"},
+            {"internalType": "uint256", "name": "newRoastingDate", "type": "uint256"},
+            {"internalType": "string", "name": "newPackagingDetails", "type": "string"},
+            {"internalType": "uint256", "name": "newPackagingDate", "type": "uint256"},
+            {"internalType": "bool", "name": "newIsShipped", "type": "bool"},
+            {"internalType": "bool", "name": "newIsDelivered", "type": "bool"},
+            {"internalType": "string", "name": "newCurrentLocation", "type": "string"}
         ],
         "name": "updateBatch",
         "outputs": [],
