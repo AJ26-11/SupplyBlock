@@ -6,8 +6,6 @@ web3 = Web3(HTTPProvider("https://sepolia.infura.io/v3/069ed309e7484022918cfca9a
 
 # Compile the smart contract source code
 contract_source_code = """
-
-
 pragma solidity ^0.8.0;
 
 contract CoffeeBeanSupplyChain {
@@ -77,16 +75,15 @@ contract CoffeeBeanSupplyChain {
         batch.currentLocation = newCurrentLocation;
 
         emit BatchUpdated(batchId);
-    }
+    }
 
-    function getBatchDetails(string memory batchId) public view returns (CoffeeBeanBatch memory) {
-        require(bytes(batches[batchId].batchId).length != 0, "Batch does not exist");
-        return batches[batchId];
-    }
+    function getBatchDetails(string memory batchId) public view returns (CoffeeBeanBatch memory, bool) {
+    if (bytes(batches[batchId].batchId).length == 0) {
+        return (CoffeeBeanBatch("", "", "", 0, "", 0, "", 0, false, false, ""), false);
+    }
+    return (batches[batchId], true);
 }
-
-
-
+}
 """
 
 compiled_sol = compile_source(contract_source_code)
