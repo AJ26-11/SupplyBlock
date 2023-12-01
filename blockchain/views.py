@@ -1,6 +1,3 @@
-from django.shortcuts import render
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import UserCreationForm
 from django.http import JsonResponse
 import json
 from .models import Batch
@@ -138,3 +135,124 @@ def convert_date_to_unix(date_str):
         return int(time.mktime(dt.timetuple()))
     except ValueError:
         return 0
+
+
+def add_batch(request):
+    if request.method == 'POST':
+        batch_id = request.POST.get('batch_id')
+        if Batch.objects.filter(batch_id=batch_id).exists():
+            return render(request, 'add_batch.html', {'error': 'BatchID already exists'})
+        farm_name = request.POST.get('farm_name')
+        origin_country = request.POST.get('origin_country')
+        harvest_date_str = request.POST.get('harvest_date')
+        harvest_date = convert_date_to_unix(harvest_date_str)
+
+        tx_hash = send_transaction(contract.functions.addBatch, batch_id, farm_name, origin_country, harvest_date)
+        Batch.objects.create(batch_id=batch_id)
+        return render(request, 'success.html', {'tx_hash': tx_hash.hex()})
+    return render(request, 'add_batch.html')
+
+
+def view_batch(request):
+    batches = Batch.objects.all()
+    if request.method == 'POST':
+        batch_id = request.POST.get('batch_id')
+        if not Batch.objects.filter(batch_id=batch_id).exists():
+            return render(request, 'view_batch.html', {'error': 'BatchID does not exist'})
+        try:
+            result = contract.functions.getBatchDetails(batch_id).call()
+            batch_details, is_successful = result
+            if not is_successful:
+                return render(request, 'view_batch.html', {'error': 'Batch not found'})
+
+            details = {
+                'batch_id': batch_details[0],
+                'farm_name': batch_details[1],
+                'origin_country': batch_details[2],
+                'harvest_date': datetime.utcfromtimestamp(batch_details[3]).strftime('%Y-%m-%d'),
+                'processing_details': batch_details[4],
+                'roasting_date': datetime.utcfromtimestamp(batch_details[5]).strftime('%Y-%m-%d') if batch_details[
+                    5] else '',
+                'packaging_details': batch_details[6],
+                'packaging_date': datetime.utcfromtimestamp(batch_details[7]).strftime('%Y-%m-%d') if batch_details[
+                    7] else '',
+                'is_shipped': batch_details[8],
+                'is_delivered': batch_details[9],
+                'current_location': batch_details[10]
+            }
+        except Exception as e:
+            print(e)
+            return render(request, 'view_batch.html', {'error': 'An error occurred'})
+
+        return render(request, 'view_batch.html', {'batch_details': details})
+
+    return render(request, 'view_batch.html', {'batches': batches})
+
+
+def update_batch(request):
+    if request.method == 'POST':
+        batch_id = request.POST.get('batch_id')
+        if not Batch.objects.filter(batch_id=batch_id).exists():
+            return render(request, 'update_batch.html', {'error': 'BatchID does not exist'})
+        new_processing_details = request.POST.get('processing_details')
+        new_packaging_details = request.POST.get('packaging_details')
+        new_current_location = request.POST.get('current_location')
+        new_is_shipped = request.POST.get('is_shipped') == 'on'
+        new_is_delivered = request.POST.get('is_delivered') == 'on'
+
+        new_roasting_date = convert_date_to_unix(request.POST.get('roasting_date'))
+        new_packaging_date = convert_date_to_unix(request.POST.get('packaging_date'))
+
+        tx_hash = send_transaction(
+            contract.functions.updateBatch,
+            batch_id,
+            new_processing_details,
+            new_roasting_date,
+            new_packaging_details,
+            new_packaging_date,
+            new_is_shipped,
+            new_is_delivered,
+            new_current_location
+        )
+        return render(request, 'success.html', {'tx_hash': tx_hash.hex()})
+    return render(request, 'update_batch.html')
+
+
+def check_batch_id(request):
+    data = json.loads(request.body)
+    batch_id = data.get('batch_id')
+    is_available = not Batch.objects.filter(batch_id=batch_id).exists()
+    return JsonResponse({'available': is_available})
+
+
+def fetch_batch_data(request):
+    data = json.loads(request.body)
+    batch_id = data.get('batch_id')
+    if Batch.objects.filter(batch_id=batch_id).exists():
+        try:
+            result = contract.functions.getBatchDetails(batch_id).call()
+            batch_details, is_successful = result
+            if not is_successful:
+                return JsonResponse({'success': False, 'error': 'Batch not found on the blockchain'})
+
+            details = {
+                'batch_id': batch_details[0],
+                'farm_name': batch_details[1],
+                'origin_country': batch_details[2],
+                'harvest_date': datetime.utcfromtimestamp(batch_details[3]).strftime('%Y-%m-%d'),
+                'processing_details': batch_details[4],
+                'roasting_date': datetime.utcfromtimestamp(batch_details[5]).strftime('%Y-%m-%d') if batch_details[
+                    5] else '',
+                'packaging_details': batch_details[6],
+                'packaging_date': datetime.utcfromtimestamp(batch_details[7]).strftime('%Y-%m-%d') if batch_details[
+                    7] else '',
+                'is_shipped': batch_details[8],
+                'is_delivered': batch_details[9],
+                'current_location': batch_details[10]
+            }
+            return JsonResponse({'success': True, 'batch_data': details})
+        except Exception as e:
+            print(e)
+            return JsonResponse({'success': False, 'error': 'An error occurred while fetching data'})
+
+    return JsonResponse({'success': False, 'error': 'BatchID does not exist in the local database'})
