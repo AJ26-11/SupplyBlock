@@ -41,3 +41,27 @@ class UserRegistrationViewTests(TestCase):
         })
         self.assertEqual(response.status_code, 302)  # Redirect status
         self.assertEqual(User.objects.count(), 1)
+
+class UserLoginViewTests(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username='testuser', password='testpassword123')
+
+    def test_login_view(self):
+        response = self.client.get(reverse('login'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_successful_login(self):
+        response = self.client.post(reverse('login'), data={
+            'username': 'testuser',
+            'password': 'testpassword123'
+        })
+        self.assertEqual(response.status_code, 302)  # Redirect status
+
+    def test_failed_login(self):
+        response = self.client.post(reverse('login'), data={
+            'username': 'wronguser',
+            'password': 'wrongpassword'
+        })
+        self.assertNotEqual(response.status_code, 302)
