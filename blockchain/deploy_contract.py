@@ -79,6 +79,13 @@ contract CoffeeBeanSupplyChain {
         emit BatchUpdated(batchId);
     }
 
+    function getBatchDetails(string memory batchId) public view returns (CoffeeBeanBatch memory) {
+        require(bytes(batches[batchId].batchId).length != 0, "Batch does not exist");
+        return batches[batchId];
+    }
+}
+
+
 
 """
 
