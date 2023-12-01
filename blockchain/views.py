@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from web3 import Web3
+from .forms import RegisterForm
 
 # Ethereum setup
 infura_url = 'https://sepolia.infura.io/v3/069ed309e7484022918cfca9a6d772f3'
@@ -429,21 +430,6 @@ def view_items(request):
 
     return render(request, 'view_items.html', {'items': items})
 
-
-@login_required
-def add_batch(request):
-    if request.method == 'POST':
-        batch_id = request.POST['batch_id']
-        farm_name = request.POST['farm_name']
-        origin_country = request.POST['origin_country']
-        harvest_date = request.POST['harvest_date']  # Ensure this is in UNIX timestamp format
-
-        tx_hash = send_transaction(contract.functions.addBatch, batch_id, farm_name, origin_country, int(harvest_date))
-        return render(request, 'success.html', {'tx_hash': tx_hash.hex()})
-
-    return render(request, 'add_batch.html')
-
-@login_required
 def process_batch(request):
     if request.method == 'POST':
         batch_id = request.POST['batch_id']
@@ -455,7 +441,6 @@ def process_batch(request):
 
     return render(request, 'process_batch.html')
 
-@login_required
 def package_batch(request):
     if request.method == 'POST':
         batch_id = request.POST['batch_id']
@@ -467,7 +452,6 @@ def package_batch(request):
 
     return render(request, 'package_batch.html')
 
-@login_required
 def ship_batch(request):
     if request.method == 'POST':
         batch_id = request.POST['batch_id']
@@ -480,7 +464,6 @@ def ship_batch(request):
 
 
 
-@login_required
 def deliver_batch(request):
     if request.method == 'POST':
         batch_id = request.POST['batch_id']
@@ -503,7 +486,7 @@ def view_batch_details(request):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
@@ -512,20 +495,37 @@ def register(request):
             login(request, user)
             return redirect('home')
     else:
-        form = UserCreationForm()
+        form = RegisterForm()
     return render(request, 'registration.html', {'form': form})
+
 
 def user_login(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        form = LoginForm(request.POST)
+        username = form.data.get('username')
+        password = form.data.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
             return redirect('home')
-        else:
-            # Return an 'invalid login' error message
-            pass
-    return render(request, 'login.html')
+    else:
+        form = LoginForm()
+    return render(request, 'login.html', {'form': form})
 
+
+def add_batch(request):
+    if request.method == 'POST':
+        try:
+            batch_id = request.POST['batch_id']
+            farm_name = request.POST['farm_name']
+            origin_country = request.POST['origin_country']
+            harvest_date = request.POST['harvest_date']
+
+            tx_hash = send_transaction(contract.functions.addBatch, batch_id, farm_name, origin_country, int(harvest_date))
+            return render(request, 'success.html', {'tx_hash': tx_hash.hex()})
+        except Exception as e:
+            # Handle exception (e.g., log it, show an error message)
+            return render(request, 'add_batch.html', {'error': str(e)})
+
+    return render(request, 'add_batch.html')
 
