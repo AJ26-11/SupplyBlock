@@ -80,5 +80,57 @@
     </div>
 </section>
 
+<script>
+document.getElementById('fetchDataBtn').addEventListener('click', function() {
+    var batchId = document.getElementById('batchId').value;
+    var csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    var fetchResult = document.getElementById('fetchResult');
+    var batchError = document.getElementById('batchError');
+
+    if (!batchId) {
+        fetchResult.textContent = 'Please enter a Batch ID';
+        fetchResult.classList.add('has-text-danger');
+        return;
+    }
+
+
+    fetch('/blockchain/fetch_batch_data/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        },
+        body: JSON.stringify({batch_id: batchId})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Prefill the form fields
+            document.getElementById('processingDetails').value = data.batch_data.processing_details || '';
+            document.getElementById('roastingDate').value = data.batch_data.roasting_date || '';
+            document.getElementById('packagingDetails').value = data.batch_data.packaging_details || '';
+            document.getElementById('packagingDate').value = data.batch_data.packaging_date || '';
+            document.getElementById('isShipped').checked = data.batch_data.is_shipped || false;
+            document.getElementById('isDelivered').checked = data.batch_data.is_delivered || false;
+            document.getElementById('currentLocation').value = data.batch_data.current_location || '';
+            fetchResult.textContent = ''; // Clear any previous message
+            fetchResult.classList.remove('has-text-danger');
+            batchError.style.display = 'none';
+        } else {
+            // Handle the case where data is not found or an error occurred
+            // alert('Batch data not found or an error occurred.');
+            fetchResult.textContent = 'Batch data not found or an error occurred.';
+            fetchResult.classList.add('has-text-danger');
+            batchError.style.display = 'none';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        fetchResult.textContent = 'An error occurred during fetching data.';
+        fetchResult.classList.add('has-text-danger');
+        batchError.style.display = ''; // Show the error message
+    });
+});
+</script>
 
 {% endblock %}
