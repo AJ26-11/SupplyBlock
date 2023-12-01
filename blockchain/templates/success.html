@@ -1,14 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Success</title>
-</head>
-<body>
-{% if created %}
-  <p>Item {{ item.item_id }} added successfully!</p>
-{% else %}
-  <p>Item {{ item.item_id }} already exists with data: {{ item.item_data }}</p>
-{% endif %}
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Transaction Success{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="content">
+            <h1 class="title">Transaction Successful</h1>
+            <p class="subtitle">
+                The transaction was processed successfully. 
+            </p>
+            <div class="notification is-primary">
+                <p>Transaction Hash: <strong>{{ tx_hash }}</strong></p>
+            </div>
+            <a class="button is-info" href="{% url 'add_batch' %}">Add Another Batch</a>
+            <a class="button is-link" href="{% url 'view_batch' %}">View Batches</a>
+            <!-- Include other navigation links as needed -->
+        </div>
+    </div>
+</section>
+{% endblock %}
