@@ -55,6 +55,30 @@ contract CoffeeBeanSupplyChain {
         emit BatchAdded(batchId);
     }
 
+    function updateBatch(
+        string memory batchId,
+        string memory newProcessingDetails,
+        uint256 newRoastingDate,
+        string memory newPackagingDetails,
+        uint256 newPackagingDate,
+        bool newIsShipped,
+        bool newIsDelivered,
+        string memory newCurrentLocation
+    ) public {
+        require(bytes(batches[batchId].batchId).length != 0, "Batch does not exist");
+
+        CoffeeBeanBatch storage batch = batches[batchId];
+        batch.processingDetails = newProcessingDetails;
+        batch.roastingDate = newRoastingDate;
+        batch.packagingDetails = newPackagingDetails;
+        batch.packagingDate = newPackagingDate;
+        batch.isShipped = newIsShipped;
+        batch.isDelivered = newIsDelivered;
+        batch.currentLocation = newCurrentLocation;
+
+        emit BatchUpdated(batchId);
+    }
+
 
 """
 
