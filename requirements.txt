@@ -1,0 +1,5 @@
+Django
+web3
+py-solc-x
+django-allauth
+gunicorn
