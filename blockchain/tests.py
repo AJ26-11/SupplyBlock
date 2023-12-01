@@ -22,3 +22,22 @@ class CoffeeBeanBatchModelTests(TestCase):
         # This test is supposed to fail for demonstration
         batch = CoffeeBeanBatch.objects.get(batch_id="batch123")
         self.assertEqual(batch.farm_name, "Nonexistent Farm")
+
+class UserRegistrationViewTests(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+
+    def test_registration_view(self):
+        response = self.client.get(reverse('register'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_successful_registration(self):
+        response = self.client.post(reverse('register'), data={
+            'username': 'testuser',
+            'email': 'test@test.com',
+            'password1': 'testpassword123',
+            'password2': 'testpassword123'
+        })
+        self.assertEqual(response.status_code, 302)  # Redirect status
+        self.assertEqual(User.objects.count(), 1)
