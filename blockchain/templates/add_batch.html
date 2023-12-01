@@ -1,11 +1,17 @@
-
 {% extends 'base.html' %}
 
 {% block content %}
 <h2>Add New Batch</h2>
 <form method="post" class="mt-3">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Add Batch</button>
-</form>
-{% endblock %}
+    <div class="mb-3">
+        <label for="batchId" class="form-label">Batch ID</label>
+        <input type="text" class="form-control" id="batchId" name="batch_id" required>
+    </div>
+    <div class="mb-3">
+        <label for="farmName" class="form-label">Farm Name</label>
+        <input type="text" class="form-control" id="farmName" name="farm_name" required>
+    </div>
+    <div class="mb-3">
+        <label for="originCountry" class="form-label">Origin Country</label>
+        <input type="text" class="form-control" id="originCountry" 
