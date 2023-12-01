@@ -1,28 +1,38 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Coffee Supply Chain{% endblock %}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
     <style>
-        body { padding-top: 5rem; }
         .navbar { margin-bottom: 2rem; }
-        .container { max-width: 800px; }
+        .container { max-width: 800px; margin: auto; }
         .footer { text-align: center; margin-top: 3rem; padding: 2rem 0; }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-        <a class="navbar-brand" href="#">CoffeeChain</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" href="{% url 'add_batch' %}">Add Batch</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'view_batch' %}">View Batch</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'update_batch' %}">Update Batch</a></li>
-            </ul>
+    <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="#">
+                CoffeeChain
+            </a>
+
+            <!-- Navbar burger for mobile view -->
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" href="{% url 'add_batch' %}">Add Batch</a>
+                <a class="navbar-item" href="{% url 'view_batch' %}">View Batch</a>
+                <a class="navbar-item" href="{% url 'update_batch' %}">Update Batch</a>
+                <!-- Additional navbar items can be added here -->
+            </div>
         </div>
     </nav>
 
@@ -30,12 +40,27 @@
         {% block content %}{% endblock %}
     </main>
 
-    <div class="footer">
-        <p>&copy; 2023 CoffeeChain</p>
-    </div>
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>&copy; 2023 CoffeeChain</p>
+        </div>
+    </footer>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Get all "navbar-burger" elements
+        const navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.0/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        // Add a click event on each of them
+        navbarBurgers.forEach(el => {
+            el.addEventListener('click', () => {
+                const target = el.dataset.target;
+                const targetEl = document.getElementById(target);
+
+                el.classList.toggle('is-active');
+                targetEl.classList.toggle('is-active');
+            });
+        });
+    });
+</script>
 </body>
 </html>
