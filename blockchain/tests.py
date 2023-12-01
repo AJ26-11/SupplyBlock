@@ -93,4 +93,4 @@ class TestViews(TestCase):
                                     content_type='application/json')
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(str(response.content, encoding='utf8'),
-                             {'success': False, 'error': 'BatchID does not exist in the local database'})
+         {'success': False, 'error': 'BatchID does not exist in the local database'})
