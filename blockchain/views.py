@@ -144,6 +144,7 @@ def add_batch(request):
         farm_name = request.POST.get('farm_name')
         origin_country = request.POST.get('origin_country')
         harvest_date_str = request.POST.get('harvest_date')
+        print(harvest_date_str)
         harvest_date = convert_date_to_unix(harvest_date_str)
 
         tx_hash = send_transaction(contract.functions.addBatch, batch_id, farm_name, origin_country, harvest_date)

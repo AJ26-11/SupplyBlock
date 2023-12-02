@@ -10,9 +10,10 @@ from selenium.webdriver.support import expected_conditions as EC
 class CoffeeChainSeleniumTests(unittest.TestCase):
 
     def setUp(self):
-        options = Options()
-        options.headless = True
-        self.driver = webdriver.Chrome(options=options)
+        # options = Options()
+        # options.headless = True
+        # self.driver = webdriver.Chrome(options=options)
+        self.driver = webdriver.Chrome()
 
     def test_add_batch(self):
         driver = self.driver
@@ -29,7 +30,7 @@ class CoffeeChainSeleniumTests(unittest.TestCase):
         batch_id_input.send_keys(unique_batch_id)
         farm_name_input.send_keys("Test Farm")
         origin_country_input.send_keys("Test Country")
-        harvest_date_input.send_keys("2023-01-01")
+        harvest_date_input.send_keys("2023-07-03")
         submit_button.click()
 
         # Check for success page
@@ -40,45 +41,45 @@ class CoffeeChainSeleniumTests(unittest.TestCase):
 
     def test_view_batch(self):
         driver = self.driver
-        driver.get("http://localhost:8000/blockchain/view/")
+        driver.get("http://localhost:8000/blockchain/view/")  # Update URL accordingly
 
-        batch_id_input = driver.find_element(By.ID, "batchId")
-        submit_button = driver.find_element(By.XPATH, "//button[@type='submit']")
+        # Click on a batch ID to view details
+        batch_id_element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, ".batch-item"))
+        )
+        batch_id = batch_id_element.get_attribute("data-batch-id")
+        batch_id_element.click()
 
-        batch_id_input.send_keys("TestBatch01")
-        submit_button.click()
-
-        # Check for details display
+        # Wait for the batch details to be displayed
         WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//h3[contains(text(),'Details for Batch ID:')]")))
+            EC.presence_of_element_located((By.XPATH, f"//div[h3[contains(., 'Details for Batch ID: {batch_id}')]]"))
+        )
+
 
     def test_update_batch(self):
-        driver = self.driver
-        driver.get("http://localhost:8000/blockchain/update/")
+            driver = self.driver
+            driver.get("http://localhost:8000/blockchain/update/")
 
-        batch_id_input = driver.find_element(By.ID, "batchId")
-        processing_details_input = driver.find_element(By.ID, "processingDetails")
-        roasting_date_input = driver.find_element(By.ID, "roastingDate")
-        packaging_details_input = driver.find_element(By.ID, "packagingDetails")
-        packaging_date_input = driver.find_element(By.ID, "packagingDate")
-        is_shipped_checkbox = driver.find_element(By.ID, "isShipped")
-        is_delivered_checkbox = driver.find_element(By.ID, "isDelivered")
-        current_location_input = driver.find_element(By.ID, "currentLocation")
-        submit_button = driver.find_element(By.XPATH, "//button[@type='submit']")
+            batch_id_input = driver.find_element(By.ID, "batchId")
+            processing_details_input = driver.find_element(By.ID, "processingDetails")
+            roasting_date_input = driver.find_element(By.ID, "roastingDate")
+            packaging_details_input = driver.find_element(By.ID, "packagingDetails")
+            packaging_date_input = driver.find_element(By.ID, "packagingDate")
+            is_shipped_checkbox = driver.find_element(By.ID, "isShipped")
+            is_delivered_checkbox = driver.find_element(By.ID, "isDelivered")
+            current_location_input = driver.find_element(By.ID, "currentLocation")
+            submit_button = driver.find_element(By.XPATH, "//button[@type='submit']")
 
-        batch_id_input.send_keys("TestBatch01")
-        processing_details_input.send_keys("Updated Processing Details")
-        roasting_date_input.send_keys("2023-02-01")
-        packaging_details_input.send_keys("Updated Packaging Details")
-        packaging_date_input.send_keys("2023-03-01")
-        is_shipped_checkbox.click()
-        is_delivered_checkbox.click()
-        current_location_input.send_keys("Updated Location")
-        submit_button.click()
-        WebDriverWait(driver, 20).until(
-            EC.presence_of_element_located(
-                (By.XPATH, "//h1[@class='title' and contains(text(),'Transaction Successful')]"))
-        )
+            batch_id_input.send_keys("TestBatch01")
+            processing_details_input.send_keys("Updated Processing Details")
+            roasting_date_input.send_keys("2023-02-01")
+            packaging_details_input.send_keys("Updated Packaging Details")
+            packaging_date_input.send_keys("2023-03-01")
+            is_shipped_checkbox.click()
+            is_delivered_checkbox.click()
+            current_location_input.send_keys("Updated Location")
+            submit_button.click()
+            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//h1[@class='title' and contains(text(),'Transaction Successful')]")))
 
     def tearDown(self):
         self.driver.close()
