@@ -7,12 +7,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout SCM') {
-            steps {
-                checkout scm
-//                 sh 'echo "checkout scm"'
-            }
-        }
         stage('Test Ganache Connection') {
             steps {
                 script {
