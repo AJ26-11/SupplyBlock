@@ -3,13 +3,16 @@ from selenium import webdriver
 import uuid
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions as EC
 
 
 class CoffeeChainSeleniumTests(unittest.TestCase):
 
     def setUp(self):
-        self.driver = webdriver.Chrome()
+        options = Options()
+        options.headless = True
+        self.driver = webdriver.Chrome(options=options)
 
     def test_add_batch(self):
         driver = self.driver
