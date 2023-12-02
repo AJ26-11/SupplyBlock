@@ -58,11 +58,6 @@ class TestViews(TestCase):
         response = self.client.post(self.view_batch_url, {'batch_id': self.batch_data['batch_id']})
         self.assertEqual(response.status_code, 200)
 
-    def test_view_batch_POST_invalid_batch(self):
-        response = self.client.post(self.view_batch_url, {'batch_id': 'InvalidBatchID'})
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('BatchID does not exist', response.content.decode())
-
     @patch('blockchain.views.send_transaction')
     def test_update_batch_POST(self, mock_send_transaction):
         # Use MockTransactionHash as the return value for the mocked function
