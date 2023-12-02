@@ -10,7 +10,6 @@ from datetime import datetime
 infura_url = 'http://127.0.0.1:7545'
 web3 = Web3(Web3.HTTPProvider(infura_url))
 
-# contract_address = '0x18ee332e1943524a797Bf58433b2782d58aacA2A'
 contract_address = '0x9aC7C272723EFdF140B0c2fFDBeE69093A885e92'
 contract_address_bytes = web3.to_checksum_address(contract_address)
 
