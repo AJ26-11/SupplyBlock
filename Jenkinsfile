@@ -61,6 +61,15 @@ pipeline {
     }
 
     post {
+        failure {
+            emailext (
+                subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                body: "A build has failed. Check Jenkins for details.",
+                recipientProviders: [[$class: 'DevelopersRecipientProvider']],
+                to: 'parjanyapandey300@gmail.com'
+            )
+        }
+
         always {
             // Clean up Docker images and containers
             sh 'docker rmi $(docker images -q elliot1022/coffeechain) --force'
