@@ -69,16 +69,15 @@ pipeline {
                 to: 'parjanyapandey300@gmail.com'
             )
         }
-
+        success {
+            mail to: 'parjanyapandey300@gmail.com',
+                 subject: "SUCCESS: Jenkins Build #${env.BUILD_NUMBER}",
+                 body: "Commit: ${GIT_COMMIT}\nBuild Status: ${currentBuild.currentResult}\nCheck Jenkins for more details."
+        }
         always {
             // Clean up Docker images and containers
             sh 'docker rmi $(docker images -q elliot1022/coffeechain) --force'
             sh 'docker rm $(docker ps -a -q) --force'
-
-
-            mail to: 'parjanyapandey300@gmail.com',
-                 subject: "Jenkins Build #${env.BUILD_NUMBER}",
-                 body: "Commit: ${GIT_COMMIT}\nBuild Status: ${currentBuild.currentResult}\nCheck Jenkins for more details."
         }
 
     }
