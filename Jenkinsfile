@@ -66,11 +66,11 @@ pipeline {
                 subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                 body: "A build has failed. Check Jenkins for details.",
                 recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-                to: 'parjanyapandey300@gmail.com'
+                to: 'aryan.bhasein20@st.niituniversity.in'
             )
         }
         success {
-            mail to: 'parjanyapandey300@gmail.com',
+            mail to: 'aryan.bhasein20@st.niituniversity.in',
                  subject: "SUCCESS: Jenkins Build #${env.BUILD_NUMBER}",
                  body: "Commit: ${GIT_COMMIT}\nBuild Status: ${currentBuild.currentResult}\nCheck Jenkins for more details."
         }
